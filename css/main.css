@@ -85,7 +85,7 @@ section{
   display: flex;
   align-items: center;
   padding: 0 9%;
-  background: url('/assets/Illustration.svg') no-repeat;
+  background: url('/Illustration.svg') no-repeat;
   background-size: auto;
   background-position: right;
 }
