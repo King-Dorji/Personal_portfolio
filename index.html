@@ -1071,6 +1071,59 @@
             });
         });
 
+        // Navigation from Tech Stack to Projects with filtering
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all the "Explore" buttons from the tech stack section
+            const exploreFrontendBtn = document.querySelector('.stack-card:nth-child(1) .stack-pill');
+            const exploreMobileBtn = document.querySelector('.stack-card.mobile .stack-pill');
+            const exploreBackendBtn = document.querySelector('.stack-card.backend .stack-pill');
+
+            // Get project filter buttons
+            const projectFilters = document.querySelectorAll('.project-filter');
+
+            // Function to handle navigation to projects section with filtering
+            function navigateToProjects(filterValue) {
+                // 1. Navigate to the projects section
+                window.location.href = '#projects';
+
+                // 2. Find the corresponding filter button and click it
+                projectFilters.forEach(filter => {
+                    if (filter.getAttribute('data-filter') === filterValue) {
+                        // Remove active class from all buttons
+                        projectFilters.forEach(btn => btn.classList.remove('active'));
+
+                        // Add active class to this button
+                        filter.classList.add('active');
+
+                        // Trigger a click event on the button to activate the filtering
+                        filter.click();
+                    }
+                });
+            }
+
+            // Add event listeners to the "Explore" buttons
+            if (exploreFrontendBtn) {
+                exploreFrontendBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    navigateToProjects('web');
+                });
+            }
+
+            if (exploreMobileBtn) {
+                exploreMobileBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    navigateToProjects('mobile');
+                });
+            }
+
+            if (exploreBackendBtn) {
+                exploreBackendBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    navigateToProjects('backend');
+                });
+            }
+        });
+
         // Form submission
         document.addEventListener('DOMContentLoaded', function () {
             const contactForm = document.getElementById('contactForm');
@@ -1305,6 +1358,7 @@
 
         observeCounters.observe(document.querySelector('.hero-stats'));
     </script>
+    <script src="tech-stack-projects-navigation.js"></script>
 </body>
 
 </html>
