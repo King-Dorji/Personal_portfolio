@@ -1071,6 +1071,29 @@
             });
         });
 
+        // Hero Section Initial Visibility Fix
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add active class to hero content elements on page load
+            setTimeout(function () {
+                const heroContent = document.querySelector('.hero-content');
+                const heroImage = document.querySelector('.hero-image');
+
+                if (heroContent) {
+                    heroContent.classList.add('active');
+                }
+
+                if (heroImage) {
+                    heroImage.classList.add('active');
+                }
+
+                // Also add active class to any other elements in the hero section that should be visible initially
+                const heroElements = document.querySelectorAll('.hero .fade-in, .hero .slide-in-left, .hero .slide-in-right, .hero .zoom-in');
+                heroElements.forEach(element => {
+                    element.classList.add('active');
+                });
+            }, 100); // Short delay to ensure DOM is fully loaded
+        });
+
         // Navigation from Tech Stack to Projects with filtering
         document.addEventListener('DOMContentLoaded', function () {
             // Get all the "Explore" buttons from the tech stack section

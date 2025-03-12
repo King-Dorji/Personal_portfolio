@@ -881,7 +881,7 @@ img {
 .experience-badge {
   position: absolute;
   bottom: 30px;
-  right: -20px;
+  right: -14px;
   background: var(--light);
   border-radius: var(--border-radius-md);
   padding: 1rem;
@@ -2810,4 +2810,29 @@ textarea.form-control {
     opacity: 0;
     transform: translateX(100%);
   }
+}
+
+/* Ensure hero elements are visible on page load */
+.slide-in-left.active,
+.slide-in-right.active {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
+
+/* Set initial state for hero elements if not already defined */
+.hero-content:not(.active),
+.hero-image:not(.active) {
+  opacity: 0;
+}
+
+.hero-content.active,
+.hero-image.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Ensure smoother transitions */
+.hero-content,
+.hero-image {
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
