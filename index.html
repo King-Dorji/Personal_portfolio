@@ -870,9 +870,88 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Initialize particles.js with tech theme
+        // Consolidated DOM ready functions
         document.addEventListener('DOMContentLoaded', function () {
+            // Initialize particles.js if available
+            initializeParticles();
+
+            // Setup hamburger menu
+            setupMobileMenu();
+
+            // Add hero visibility classes
+            initializeHeroVisibility();
+
+            // Setup tech stack to projects navigation
+            setupTechStackNavigation();
+
+            // Setup form submission
+            setupContactForm();
+
+            // Setup counter animation observation
+            setupCounterAnimations();
+        });
+
+        // Scroll event handlers
+        window.onscroll = function () {
+            scrollFunction();
+            scrollProgressBar();
+        };
+
+        // Go to top button click handler
+        document.getElementById("goTop")?.addEventListener("click", function (e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+
+        // Type writer effect for hero title
+        window.addEventListener('load', function () {
+            const typingElement = document.querySelector('.typing-text');
+            if (typingElement) {
+                const text = typingElement.textContent;
+                let i = 0;
+                typingElement.textContent = '';
+
+                setTimeout(function typeWriter() {
+                    if (i < text.length) {
+                        typingElement.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 100);
+                    }
+                }, 1000);
+            }
+        });
+
+        // Dark mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.documentElement;
+
+        if (themeToggle) {
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            themeToggle.addEventListener('click', function () {
+                body.classList.toggle('dark-mode');
+
+                if (body.classList.contains('dark-mode')) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+
+        // Helper functions
+        function initializeParticles() {
             if (typeof particlesJS !== 'undefined') {
+                // Initialize particles-tech
                 particlesJS("particles-tech", {
                     particles: {
                         number: { value: 80, density: { enable: true, value_area: 800 } },
@@ -923,54 +1002,187 @@
                     },
                     retina_detect: true
                 });
+
+                // Initialize particles-js
+                particlesJS('particles-js', {
+                    particles: {
+                        number: {
+                            value: 50,
+                            density: {
+                                enable: true,
+                                value_area: 800
+                            }
+                        },
+                        color: {
+                            value: "#5C62F9"
+                        },
+                        shape: {
+                            type: "circle",
+                            stroke: {
+                                width: 0,
+                                color: "#000000"
+                            }
+                        },
+                        opacity: {
+                            value: 0.4,
+                            random: true,
+                            anim: {
+                                enable: true,
+                                speed: 1,
+                                opacity_min: 0.1,
+                                sync: false
+                            }
+                        },
+                        size: {
+                            value: 3,
+                            random: true,
+                            anim: {
+                                enable: true,
+                                speed: 2,
+                                size_min: 0.1,
+                                sync: false
+                            }
+                        },
+                        line_linked: {
+                            enable: true,
+                            distance: 150,
+                            color: "#5C62F9",
+                            opacity: 0.2,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 1,
+                            direction: "none",
+                            random: true,
+                            straight: false,
+                            out_mode: "out",
+                            bounce: false,
+                            attract: {
+                                enable: false,
+                                rotateX: 600,
+                                rotateY: 1200
+                            }
+                        }
+                    },
+                    interactivity: {
+                        detect_on: "canvas",
+                        events: {
+                            onhover: {
+                                enable: true,
+                                mode: "bubble"
+                            },
+                            onclick: {
+                                enable: true,
+                                mode: "push"
+                            },
+                            resize: true
+                        },
+                        modes: {
+                            grab: {
+                                distance: 400,
+                                line_linked: {
+                                    opacity: 1
+                                }
+                            },
+                            bubble: {
+                                distance: 200,
+                                size: 6,
+                                duration: 2,
+                                opacity: 0.8,
+                                speed: 3
+                            },
+                            repulse: {
+                                distance: 200,
+                                duration: 0.4
+                            },
+                            push: {
+                                particles_nb: 4
+                            },
+                            remove: {
+                                particles_nb: 2
+                            }
+                        }
+                    },
+                    retina_detect: true
+                });
             }
-        });
+        }
 
-        // Mobile Menu Toggle
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
+        function setupMobileMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
+            if (hamburger && navMenu) {
+                // Replace existing handler with improved one
+                const newHamburger = hamburger.cloneNode(true);
+                hamburger.parentNode.replaceChild(newHamburger, hamburger);
 
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
+                newHamburger.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    this.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
 
-        // Scroll Progress Bar
-        window.onscroll = function () {
-            scrollFunction();
-            scrollProgressBar();
-        };
+                // Close on outside click
+                document.addEventListener('click', function (e) {
+                    if (!navMenu.classList.contains('active')) return;
+                    if (!navMenu.contains(e.target) && !newHamburger.contains(e.target)) {
+                        navMenu.classList.remove('active');
+                        newHamburger.classList.remove('active');
+                    }
+                });
+
+                // Close on ESC key press
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        newHamburger.classList.remove('active');
+                    }
+                });
+
+                // Close when clicking nav links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        const hamButton = document.getElementById('hamburger');
+                        if (hamButton) {
+                            hamButton.classList.remove('active');
+                        }
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+        }
 
         function scrollProgressBar() {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (winScroll / height) * 100;
 
-            document.getElementById("progressBar").style.width = scrolled + "%";
+            const progressBar = document.getElementById("progressBar");
+            if (progressBar) {
+                progressBar.style.width = scrolled + "%";
+            }
         }
 
         function scrollFunction() {
             const goTop = document.getElementById("goTop");
-            if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
-                goTop.classList.add("active");
-            } else {
-                goTop.classList.remove("active");
+            if (goTop) {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    goTop.classList.add("active");
+                } else {
+                    goTop.classList.remove("active");
+                }
             }
 
             // Header scroll effect
             const header = document.querySelector('.header');
-            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+            if (header) {
+                if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
             }
 
             // Reveal animations on scroll
@@ -987,93 +1199,7 @@
             });
         }
 
-        // Go to top button
-        document.getElementById("goTop").addEventListener("click", function (e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
-
-        // Typing Animation
-        const typingElement = document.querySelector('.typing-text');
-        const text = typingElement.textContent;
-        let i = 0;
-        typingElement.textContent = '';
-
-        function typeWriter() {
-            if (i < text.length) {
-                typingElement.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        }
-
-        // Start typing animation after page load
-        window.addEventListener('load', () => {
-            setTimeout(typeWriter, 1000);
-        });
-
-        // Dark Mode Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.documentElement;
-
-        // Check for saved theme preference
-        if (localStorage.getItem('theme') === 'dark') {
-            body.classList.add('dark-mode');
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-
-            if (body.classList.contains('dark-mode')) {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                localStorage.setItem('theme', 'light');
-            }
-        });
-
-        // Project Filtering
-        const filterButtons = document.querySelectorAll('.project-filter');
-        const projectCards = document.querySelectorAll('.project-card');
-
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-
-                // Add active class to clicked button
-                button.classList.add('active');
-
-                const filterValue = button.getAttribute('data-filter');
-
-                projectCards.forEach(card => {
-                    const category = card.getAttribute('data-category');
-
-                    if (filterValue === 'all' || filterValue === category) {
-                        card.style.display = 'block';
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        }, 200);
-                    } else {
-                        card.style.opacity = '0';
-                        card.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            card.style.display = 'none';
-                        }, 300);
-                    }
-                });
-            });
-        });
-
-        // Hero Section Initial Visibility Fix
-        document.addEventListener('DOMContentLoaded', function () {
-            // Add active class to hero content elements on page load
+        function initializeHeroVisibility() {
             setTimeout(function () {
                 const heroContent = document.querySelector('.hero-content');
                 const heroImage = document.querySelector('.hero-image');
@@ -1086,45 +1212,32 @@
                     heroImage.classList.add('active');
                 }
 
-                // Also add active class to any other elements in the hero section that should be visible initially
                 const heroElements = document.querySelectorAll('.hero .fade-in, .hero .slide-in-left, .hero .slide-in-right, .hero .zoom-in');
                 heroElements.forEach(element => {
                     element.classList.add('active');
                 });
-            }, 100); // Short delay to ensure DOM is fully loaded
-        });
+            }, 100);
+        }
 
-        // Navigation from Tech Stack to Projects with filtering
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get all the "Explore" buttons from the tech stack section
+        function setupTechStackNavigation() {
             const exploreFrontendBtn = document.querySelector('.stack-card:nth-child(1) .stack-pill');
             const exploreMobileBtn = document.querySelector('.stack-card.mobile .stack-pill');
             const exploreBackendBtn = document.querySelector('.stack-card.backend .stack-pill');
 
-            // Get project filter buttons
             const projectFilters = document.querySelectorAll('.project-filter');
 
-            // Function to handle navigation to projects section with filtering
             function navigateToProjects(filterValue) {
-                // 1. Navigate to the projects section
                 window.location.href = '#projects';
 
-                // 2. Find the corresponding filter button and click it
                 projectFilters.forEach(filter => {
                     if (filter.getAttribute('data-filter') === filterValue) {
-                        // Remove active class from all buttons
                         projectFilters.forEach(btn => btn.classList.remove('active'));
-
-                        // Add active class to this button
                         filter.classList.add('active');
-
-                        // Trigger a click event on the button to activate the filtering
                         filter.click();
                     }
                 });
             }
 
-            // Add event listeners to the "Explore" buttons
             if (exploreFrontendBtn) {
                 exploreFrontendBtn.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -1145,26 +1258,60 @@
                     navigateToProjects('backend');
                 });
             }
-        });
 
-        // Form submission
-        document.addEventListener('DOMContentLoaded', function () {
+            // Setup project filters
+            projectFilters.forEach(button => {
+                button.addEventListener('click', () => {
+                    projectFilters.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const filterValue = button.getAttribute('data-filter');
+                    const projectCards = document.querySelectorAll('.project-card');
+
+                    projectCards.forEach(card => {
+                        const category = card.getAttribute('data-category');
+
+                        if (filterValue === 'all' || filterValue === category) {
+                            card.style.display = 'block';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 200);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(20px)';
+                            setTimeout(() => {
+                                card.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+        }
+
+        function setupContactForm() {
             const contactForm = document.getElementById('contactForm');
             const formAlert = document.getElementById('formAlert');
             const alertMessage = document.getElementById('alertMessage');
             const alertClose = document.getElementById('alertClose');
             const submitBtn = document.getElementById('submit-btn');
 
+            if (!contactForm || !formAlert) return;
+
             // Close alert when clicking the close button
-            alertClose.addEventListener('click', function () {
-                formAlert.classList.remove('active');
-                setTimeout(() => {
-                    formAlert.classList.remove('success', 'error');
-                }, 500);
-            });
+            if (alertClose) {
+                alertClose.addEventListener('click', function () {
+                    formAlert.classList.remove('active');
+                    setTimeout(() => {
+                        formAlert.classList.remove('success', 'error');
+                    }, 500);
+                });
+            }
 
             // Function to show alert
             function showAlert(message, type) {
+                if (!alertMessage || !formAlert) return;
+
                 alertMessage.textContent = message;
                 formAlert.classList.add('active', type);
 
@@ -1196,190 +1343,91 @@
             }
 
             // Handle form submission
-            if (contactForm) {
-                contactForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-                    // Show loading state
-                    submitBtn.classList.add('loading');
-                    submitBtn.disabled = true;
+                if (!submitBtn) return;
 
-                    // Get form data
-                    const formData = new FormData(contactForm);
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
 
-                    // Get email for logging (masked)
-                    const email = document.getElementById('email').value;
-                    const maskedEmail = maskEmail(email);
+                // Get form data
+                const formData = new FormData(contactForm);
 
-                    // Send to FormCarry
-                    fetch(contactForm.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'Accept': 'application/json'
-                        }
+                // Get email for logging (masked)
+                const email = document.getElementById('email')?.value;
+                const maskedEmail = maskEmail(email);
+
+                // Send to FormCarry
+                fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(response => {
+                        // Success message
+                        showAlert('Message sent successfully! I will get back to you soon.', 'success');
+
+                        // Log masked email for tracking
+                        console.log(`Form submitted by: ${maskedEmail}`);
+
+                        // Reset form
+                        contactForm.reset();
                     })
-                        .then(response => response.json())
-                        .then(response => {
-                            // Success message
-                            showAlert('Message sent successfully! I will get back to you soon.', 'success');
+                    .catch(error => {
+                        // Error message
+                        showAlert('Error sending message. Please try again or email me directly.', 'error');
+                        console.error('Form submission error:', error);
+                    })
+                    .finally(() => {
+                        // Restore button state
+                        submitBtn.classList.remove('loading');
+                        submitBtn.disabled = false;
+                    });
+            });
+        }
 
-                            // Log masked email for tracking
-                            console.log(`Form submitted by: ${maskedEmail}`);
+        function setupCounterAnimations() {
+            // Counter Animation
+            function animateCounter(elementId, target, duration) {
+                const element = document.getElementById(elementId);
+                if (!element) return;
 
-                            // Reset form
-                            contactForm.reset();
-                        })
-                        .catch(error => {
-                            // Error message
-                            showAlert('Error sending message. Please try again or email me directly.', 'error');
-                            console.error('Form submission error:', error);
-                        })
-                        .finally(() => {
-                            // Restore button state
-                            submitBtn.classList.remove('loading');
-                            submitBtn.disabled = false;
-                        });
-                });
+                const start = 0;
+                const increment = target > start ? 1 : -1;
+                let current = start;
+                const stepTime = Math.abs(Math.floor(duration / target));
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    element.textContent = current + "+";
+                    if (current === target) {
+                        clearInterval(timer);
+                    }
+                }, stepTime);
             }
-        });
 
-        // Initialize particles.js for hero section
-        if (typeof particlesJS !== 'undefined') {
-            particlesJS('particles-js', {
-                particles: {
-                    number: {
-                        value: 50,
-                        density: {
-                            enable: true,
-                            value_area: 800
+            // Initialize counters when they come into view
+            const heroStats = document.querySelector('.hero-stats');
+            if (heroStats) {
+                const observeCounters = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateCounter('experienceCounter', 8, 1000);
+                            animateCounter('projectsCounter', 50, 2000);
+                            animateCounter('clientsCounter', 30, 1500);
+                            observeCounters.disconnect();
                         }
-                    },
-                    color: {
-                        value: "#5C62F9"
-                    },
-                    shape: {
-                        type: "circle",
-                        stroke: {
-                            width: 0,
-                            color: "#000000"
-                        }
-                    },
-                    opacity: {
-                        value: 0.4,
-                        random: true,
-                        anim: {
-                            enable: true,
-                            speed: 1,
-                            opacity_min: 0.1,
-                            sync: false
-                        }
-                    },
-                    size: {
-                        value: 3,
-                        random: true,
-                        anim: {
-                            enable: true,
-                            speed: 2,
-                            size_min: 0.1,
-                            sync: false
-                        }
-                    },
-                    line_linked: {
-                        enable: true,
-                        distance: 150,
-                        color: "#5C62F9",
-                        opacity: 0.2,
-                        width: 1
-                    },
-                    move: {
-                        enable: true,
-                        speed: 1,
-                        direction: "none",
-                        random: true,
-                        straight: false,
-                        out_mode: "out",
-                        bounce: false,
-                        attract: {
-                            enable: false,
-                            rotateX: 600,
-                            rotateY: 1200
-                        }
-                    }
-                },
-                interactivity: {
-                    detect_on: "canvas",
-                    events: {
-                        onhover: {
-                            enable: true,
-                            mode: "bubble"
-                        },
-                        onclick: {
-                            enable: true,
-                            mode: "push"
-                        },
-                        resize: true
-                    },
-                    modes: {
-                        grab: {
-                            distance: 400,
-                            line_linked: {
-                                opacity: 1
-                            }
-                        },
-                        bubble: {
-                            distance: 200,
-                            size: 6,
-                            duration: 2,
-                            opacity: 0.8,
-                            speed: 3
-                        },
-                        repulse: {
-                            distance: 200,
-                            duration: 0.4
-                        },
-                        push: {
-                            particles_nb: 4
-                        },
-                        remove: {
-                            particles_nb: 2
-                        }
-                    }
-                },
-                retina_detect: true
-            });
+                    });
+                }, { threshold: 0.5 });
+
+                observeCounters.observe(heroStats);
+            }
         }
-
-        // Counter Animation
-        function animateCounter(elementId, target, duration) {
-            const element = document.getElementById(elementId);
-            const start = 0;
-            const increment = target > start ? 1 : -1;
-            let current = start;
-            const stepTime = Math.abs(Math.floor(duration / target));
-
-            const timer = setInterval(() => {
-                current += increment;
-                element.textContent = current + "+";
-                if (current === target) {
-                    clearInterval(timer);
-                }
-            }, stepTime);
-        }
-
-        // Initialize counters when they come into view
-        const observeCounters = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounter('experienceCounter', 8, 1000);
-                    animateCounter('projectsCounter', 50, 2000);
-                    animateCounter('clientsCounter', 30, 1500);
-                    observeCounters.disconnect();
-                }
-            });
-        }, { threshold: 0.5 });
-
-        observeCounters.observe(document.querySelector('.hero-stats'));
     </script>
     <script src="tech-stack-projects-navigation.js"></script>
 </body>
