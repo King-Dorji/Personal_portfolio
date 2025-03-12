@@ -1428,6 +1428,43 @@
                 observeCounters.observe(heroStats);
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Find the email link in the contact section
+            const emailLink = document.querySelector('.contact-text a[href^="mailto:hello@kingori.dev"]');
+
+            if (emailLink) {
+                // Update href to prevent default email client from opening
+                emailLink.setAttribute('href', '#contactForm');
+
+                // Change the link behavior to focus on contact form
+                emailLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Get the name input field
+                    const nameField = document.getElementById('name');
+
+                    if (nameField) {
+                        // Scroll to the form
+                        nameField.scrollIntoView({ behavior: 'smooth' });
+
+                        // Focus and highlight the input field
+                        setTimeout(() => {
+                            nameField.focus();
+
+                            // Add a brief highlight effect to the name field
+                            nameField.style.transition = 'box-shadow 0.3s ease';
+                            nameField.style.boxShadow = '0 0 0 3px rgba(92, 98, 249, 0.5)';
+
+                            // Remove highlight after a short delay
+                            setTimeout(() => {
+                                nameField.style.boxShadow = '';
+                            }, 1500);
+                        }, 600);
+                    }
+                });
+            }
+        });
     </script>
     <script src="tech-stack-projects-navigation.js"></script>
 </body>
